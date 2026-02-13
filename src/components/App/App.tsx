@@ -13,8 +13,8 @@ import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 /*types*/
-import type { MovieServiceProps } from '../../types/movie';
 import type { Movie } from '../../types/movie';
+import type { MovieServiceProps } from '../../services/movieService';
 
 
 export default function App() {
@@ -22,6 +22,7 @@ export default function App() {
   const [isError, setIsError] = useState(false);
 
   const handleAction = async (query: string) => {
+    setIsError(false);
     setIsLoading(true);
     setMovies([]);
     try {
@@ -44,13 +45,9 @@ export default function App() {
   const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
   const handleSelect = (movie: Movie) => {
     setCurrentMovie(movie);
-    openModal()
   }
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
-    setIsModalOpen(false);
     setCurrentMovie(null);
   };
 
@@ -59,9 +56,9 @@ export default function App() {
   return (
     <>
       <Toaster />
-      <SearchBar action={handleAction} />
+      <SearchBar onSubmit={handleAction} />
       {isLoading ? <Loader /> : isError ? <ErrorMessage /> : <MovieGrid movies={movies} onSelect={handleSelect} />}
-      {isModalOpen && <MovieModal movie={currentMovie} onClose={closeModal}/>}
+      {currentMovie !== null && <MovieModal movie={currentMovie} onClose={closeModal}/>}
     </>
   )
 };
