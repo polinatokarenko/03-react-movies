@@ -11,7 +11,7 @@ interface FetchMoviesResult {
 
 const myKey = import.meta.env.VITE_TMDB_TOKEN;
 
-export default async function fetchMovies(params: MovieServiceProps): Promise<FetchMoviesResult> {
+export default async function fetchMovies(params: MovieServiceProps): Promise<Movie[]> {
     const response = await axios.get<FetchMoviesResult>("https://api.themoviedb.org/3/search/movie", {
         params,
         headers: {
@@ -19,5 +19,6 @@ export default async function fetchMovies(params: MovieServiceProps): Promise<Fe
         }
     }
     );
-    return response.data;
+    console.log(response.data.results);
+    return response.data.results;
 };
